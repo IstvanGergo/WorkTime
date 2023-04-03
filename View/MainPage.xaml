@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:WorkTime.Model"
+             xmlns:viewmodel="clr-namespace:WorkTime.ViewModel"
+             x:Class="WorkTime.View.MainPage"
+             x:DataType="viewmodel:WorkTimeMainViewModel">
+    <ListView
+        SeparatorColor="Black">
+        <ListView.Header>
+            <HorizontalStackLayout
+                HorizontalOptions="Center">
+                    <Label Text="Dátum"
+                           MaximumWidthRequest="65"/>
+                    <Label Text="Kezdés időpontja"
+                           HeightRequest="35"
+                           MaximumWidthRequest="80"/>
+                    <Label Text="Vége"/>
+                    <Label Text="Munkaidő"
+                           MaximumWidthRequest="85"/>
+                    <Label Text="Megtett táv"
+                           MaximumWidthRequest="75"/>
+                </HorizontalStackLayout>
+        </ListView.Header>
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="model:WorkTimeEntry">
+                <HorizontalStackLayout>
+                    <Label Text="{Binding Day}"/>
+                    <Label Text="{Binding Start}"
+                               LineBreakMode="WordWrap"
+                               Grid.Column="1"/>
+                    <Label Text="{Binding End}"
+                               LineBreakMode="WordWrap"
+                               Grid.Column="2"
+                               Grid.Row="0"/>
+                    <Label Text="{Binding Time}"
+                               LineBreakMode="WordWrap"
+                               Grid.Column="3"
+                               Grid.Row="0"/>
+                    <Label Text="{Binding Distance}"
+                               Grid.Column="4"
+                               Grid.Row="0"
+                               HorizontalTextAlignment="Center"/>
+                </HorizontalStackLayout>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>
