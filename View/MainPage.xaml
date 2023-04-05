@@ -10,37 +10,31 @@
         <ListView.Header>
             <HorizontalStackLayout
                 HorizontalOptions="Center">
-                    <Label Text="Dátum"
-                           MaximumWidthRequest="65"/>
-                    <Label Text="Kezdés időpontja"
-                           HeightRequest="35"
-                           MaximumWidthRequest="80"/>
-                    <Label Text="Vége"/>
-                    <Label Text="Munkaidő"
-                           MaximumWidthRequest="85"/>
-                    <Label Text="Megtett táv"
-                           MaximumWidthRequest="75"/>
-                </HorizontalStackLayout>
+                <Label Text="Dátum"
+                            MaximumWidthRequest="65"/>
+                <Label Text="Kezdés időpontja"
+                            HeightRequest="35"
+                            MaximumWidthRequest="80"/>
+                <Label Text="Vége"/>
+                <Label Text="Munkaidő"
+                            MaximumWidthRequest="85"/>
+                <Label Text="Megtett táv"
+                            MaximumWidthRequest="75"/>
+            </HorizontalStackLayout>
         </ListView.Header>
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="model:WorkTimeEntry">
                 <HorizontalStackLayout>
-                    <Label Text="{Binding Day}"/>
+                    <Label Text="{Binding Date}"/>
                     <Label Text="{Binding Start}"
-                               LineBreakMode="WordWrap"
-                               Grid.Column="1"/>
+                                LineBreakMode="WordWrap"/>
                     <Label Text="{Binding End}"
-                               LineBreakMode="WordWrap"
-                               Grid.Column="2"
-                               Grid.Row="0"/>
+                                LineBreakMode="WordWrap"/>
                     <Label Text="{Binding Time}"
-                               LineBreakMode="WordWrap"
-                               Grid.Column="3"
-                               Grid.Row="0"/>
+                                LineBreakMode="WordWrap"/>
                     <Label Text="{Binding Distance}"
-                               Grid.Column="4"
-                               Grid.Row="0"
-                               HorizontalTextAlignment="Center"/>
+
+                                HorizontalTextAlignment="Center"/>
                 </HorizontalStackLayout>
             </DataTemplate>
         </ListView.ItemTemplate>
