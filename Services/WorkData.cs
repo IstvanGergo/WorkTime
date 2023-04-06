@@ -1,4 +1,6 @@
 ﻿using SQLitePCL;
+using System.Runtime.Intrinsics.Arm;
+
 namespace WorkTime.Services;
 
 public class WorkData
@@ -51,26 +53,43 @@ public class WorkData
     {
         SqliteCommand sqlite_cmd = conn.CreateCommand();
         sqlite_cmd.CommandText = "INSERT INTO WorkTime" +
-            "(Date, Start, End, Time, Distance) VALUES ('2020.01.01', '6:30', '8:30', '8:00', 156)";
+            "(Date, Start, End, Time, Distance) VALUES ('2020.01.01', '6:30', '8:30', '8:00', 156)," +
+            "('2021.05.06', '1:30', '18:30', '20:00', 156)";
         sqlite_cmd.ExecuteNonQuery();
     }
-    public static List<WorkTimeEntry> GetItems(SqliteConnection conn)
+    public static ObservableCollection<WorkTimeEntry> GetItems(SqliteConnection conn)
     {
-        var list = new List<WorkTimeEntry>();
-        SqliteCommand sqlite_cmd = conn.CreateCommand();
-        sqlite_cmd.CommandText = "SELECT * FROM WorkTime";
-        sqlite_cmd.ExecuteNonQuery();
-        SqliteDataReader reader = sqlite_cmd.ExecuteReader();
-        while (reader.Read())
+        var list = new ObservableCollection<WorkTimeEntry>();
+        SqliteCommand sqlite_cmd = new("SELECT * FROM WorkTime", conn);
+        SqliteDataReader reader = null;
+        try
         {
-            WorkTimeEntry data = new WorkTimeEntry();
-            data.Date = (string)reader[1];
-            data.Start = (string)reader[2];
-            data.End = (string)reader[3];
-            data.Time = (string)reader[4];
-            data.Distance = (long)reader[5];
-            list.Add(data);
+            
+            conn.Open();
+            reader = sqlite_cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                WorkTimeEntry data = new WorkTimeEntry();
+                data.Date = (string)reader[1];
+                data.Start = (string)reader[2];
+                data.End = (string)reader[3];
+                data.Time = (string)reader[4];
+                data.Distance = (long)reader[5];
+                list.Add(data);
+            }
         }
+        finally
+        {
+            if (reader != null)
+            {
+                reader.Close();
+            }
+            if (conn != null)
+            {
+                conn.Close();
+            }
+        }
+        
         return list;
     }
 }

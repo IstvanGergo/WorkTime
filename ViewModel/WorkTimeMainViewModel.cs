@@ -9,6 +9,6 @@ public partial class WorkTimeMainViewModel : BaseViewModel
         conn.Open();
         WorkData.CreateTable(conn);
         WorkData.InsertData(conn);
-        List<WorkTimeEntry> entries = WorkData.GetItems(conn);
+        ObservableCollection<WorkTimeEntry> entries = WorkData.GetItems(conn);
     }
 }
