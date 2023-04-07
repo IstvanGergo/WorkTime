@@ -6,9 +6,8 @@
              x:Class="WorkTime.View.MainPage"
              x:DataType="viewmodel:WorkTimeMainViewModel">
     <ListView
-        SeparatorColor="Black"
         ItemsSource="{Binding Workentries}"
-        SelectionMode="None">
+        IsGroupingEnabled="True">
         <ListView.Header>
             <HorizontalStackLayout
                 HorizontalOptions="Center">
