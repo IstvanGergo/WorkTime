@@ -1,7 +1,10 @@
-﻿namespace WorkTime.Model;
+﻿using SQLite;
+
+namespace WorkTime.Model;
 
 public class WorkTimeEntry
 {
+    [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
     public string Date { get; set; }
     public string Start { get; set; }
