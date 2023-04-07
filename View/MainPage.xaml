@@ -14,7 +14,7 @@
                 <Label Text="Dátum"
                             MaximumWidthRequest="65"/>
                 <Label Text="Kezdés időpontja"
-                            HeightRequest="35"
+                            HeightRequest="40"
                             MaximumWidthRequest="80"/>
                 <Label Text="Vége"/>
                 <Label Text="Munkaidő"
@@ -25,17 +25,19 @@
         </ListView.Header>
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="model:WorkTimeEntry">
-                <HorizontalStackLayout>
-                    <Label Text="{Binding Date}"/>
-                    <Label Text="{Binding Start}"
+                <ViewCell>
+                    <HorizontalStackLayout>
+                        <Label Text="{Binding Date}"/>
+                        <Label Text="{Binding Start}"
                                 LineBreakMode="WordWrap"/>
-                    <Label Text="{Binding End}"
+                        <Label Text="{Binding End}"
                                 LineBreakMode="WordWrap"/>
-                    <Label Text="{Binding Time}"
+                        <Label Text="{Binding Time}"
                                 LineBreakMode="WordWrap"/>
-                    <Label Text="{Binding Distance}"
+                        <Label Text="{Binding Distance}"
                                 HorizontalTextAlignment="Center"/>
-                </HorizontalStackLayout>
+                    </HorizontalStackLayout>
+                </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>

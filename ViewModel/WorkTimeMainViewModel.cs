@@ -7,8 +7,13 @@ public partial class WorkTimeMainViewModel : BaseViewModel
     {
         WorkData.DropTable();
         WorkData.CreateTable();
+        WorkData.InsertData("2020.10.10", "10:10", "20:20", 156);
         WorkData wd = new();
+        
         List<WorkTimeEntry> entries = wd.GetItems();
-        entries.ForEach(Workentries.Add);
+        foreach (WorkTimeEntry entry in entries)
+        {
+            Workentries.Add(entry);
+        }
     }
 }
