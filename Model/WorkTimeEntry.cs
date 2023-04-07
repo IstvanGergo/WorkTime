@@ -1,6 +1,4 @@
-﻿using SQLite;
-
-namespace WorkTime.Model;
+﻿namespace WorkTime.Model;
 
 public class WorkTimeEntry
 {
