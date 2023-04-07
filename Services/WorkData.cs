@@ -1,20 +1,22 @@
 ﻿using SQLitePCL;
+using System.Globalization;
 using System.Runtime.Intrinsics.Arm;
 
 namespace WorkTime.Services;
 
 public class WorkData
 {
-    public const string DatabaseName = "WorkTime.db";
+    public const string DatabaseName = "WorkTime.db3";
     public static string DatabasePath
     {
         get
         {
             var basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string path =Path.Combine(basePath +"/"+ DatabaseName);
-            return $"Data Source={path}";
+            return $"{path}";
         }
     }
+    List<WorkTimeEntry> entries= new();
     public WorkData()
     {
 
@@ -40,7 +42,7 @@ public class WorkData
         SqliteCommand command = conn.CreateCommand();
         command.CommandText = @"
         CREATE TABLE IF NOT EXISTS WorkTime (
-        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Id INTEGER PRIMARY KEY,
         Date TEXT,
         Start TEXT,
         End TEXT,
@@ -49,47 +51,56 @@ public class WorkData
         );";
         command.ExecuteNonQuery();
     }
-    public static void InsertData(SqliteConnection conn)
+    public static void InsertData(SqliteConnection conn, string date, string start, string end, long distance)
     {
         SqliteCommand sqlite_cmd = conn.CreateCommand();
-        sqlite_cmd.CommandText = "INSERT INTO WorkTime" +
-            "(Date, Start, End, Time, Distance) VALUES ('2020.01.01', '6:30', '8:30', '8:00', 156)," +
-            "('2021.05.06', '1:30', '18:30', '20:00', 156)";
+        DateTime dstart = DateTime.ParseExact(start,"HH:mm",CultureInfo.InvariantCulture,
+                                              DateTimeStyles.None);
+        DateTime dend= DateTime.ParseExact(end, "HH:mm", CultureInfo.InvariantCulture,
+                                              DateTimeStyles.None);
+        TimeSpan length = dend - dstart;
+
+        string time = string.Format("{0:00}:{1:00}",length.Hours,length.Minutes);
+        sqlite_cmd.CommandText = $"INSERT INTO WorkTime (Date, Start, End, Time, Distance) VALUES ('{date}','{start}', '{end}', '{time}', {distance})";
         sqlite_cmd.ExecuteNonQuery();
+        conn?.Close();
     }
-    public static ObservableCollection<WorkTimeEntry> GetItems(SqliteConnection conn)
+    public List<WorkTimeEntry> GetItems(SqliteConnection conn)
     {
-        var list = new ObservableCollection<WorkTimeEntry>();
         SqliteCommand sqlite_cmd = new("SELECT * FROM WorkTime", conn);
         SqliteDataReader reader = null;
         try
         {
-            
             conn.Open();
-            reader = sqlite_cmd.ExecuteReader();
+            reader =  sqlite_cmd.ExecuteReader();
             while (reader.Read())
             {
-                WorkTimeEntry data = new WorkTimeEntry();
+                WorkTimeEntry data = new();
                 data.Date = (string)reader[1];
                 data.Start = (string)reader[2];
                 data.End = (string)reader[3];
                 data.Time = (string)reader[4];
                 data.Distance = (long)reader[5];
-                list.Add(data);
+
+                entries.Add(data);
             }
         }
         finally
         {
-            if (reader != null)
-            {
-                reader.Close();
-            }
-            if (conn != null)
-            {
-                conn.Close();
-            }
+            reader?.Close();
+            conn?.Close();
         }
-        
-        return list;
+        return entries;
+    }
+    public static void DeleteData(SqliteConnection conn, int id)
+    {
+        conn.Open();
+        SqliteCommand sqlite_cmd = new($"DELETE FROM WorkTime WHERE id = {id}");
+        conn?.Close();
+    }
+    public static void DropTable(SqliteConnection conn)
+    {
+        conn.Open();
+        SqliteCommand sqlite_cmd = new("DROP WorkTime");
     }
 }
