@@ -21,6 +21,7 @@ public class WorkData
     {
         using var conn = new SqliteConnection(DatabasePath);
         SqliteCommand command = conn.CreateCommand();
+        conn.Open();
         command.CommandText = @"
         CREATE TABLE IF NOT EXISTS WorkTime (
         Id INTEGER PRIMARY KEY,
@@ -31,11 +32,12 @@ public class WorkData
         Distance INTEGER
         );";
         command.ExecuteNonQuery();
-
+        conn?.Close();
     }
     public static void InsertData(string date, string start, string end, long distance)
     {
         using var conn = new SqliteConnection(DatabasePath);
+        conn.Open();
         SqliteCommand sqlite_cmd = conn.CreateCommand();
         DateTime dstart = DateTime.ParseExact(start,"HH:mm",CultureInfo.InvariantCulture,
                                               DateTimeStyles.None);
@@ -51,6 +53,7 @@ public class WorkData
     public List<WorkTimeEntry> GetItems()
     {
         using var conn = new SqliteConnection(DatabasePath);
+        conn.Open();
         SqliteCommand sqlite_cmd = new("SELECT * FROM WorkTime", conn);
         SqliteDataReader reader = null;
         try
@@ -79,12 +82,14 @@ public class WorkData
     public static void DeleteData( int id)
     {
         using var conn = new SqliteConnection(DatabasePath);
+        conn.Open();
         SqliteCommand sqlite_cmd = new($"DELETE FROM WorkTime WHERE id = {id}");
         conn?.Close();
     }
     public static void DropTable()
     {
         using var conn = new SqliteConnection(DatabasePath);
+        conn.Open();
         SqliteCommand sqlite_cmd = new("DROP WorkTime");
         conn?.Close();
     }
