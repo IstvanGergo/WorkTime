@@ -5,12 +5,10 @@ public partial class WorkTimeMainViewModel : BaseViewModel
     public ObservableCollection<WorkTimeEntry> Workentries { get; } = new();
     public WorkTimeMainViewModel() 
     {
-        SqliteConnection conn = WorkData.CreateConnection();
-        conn.Open();
-        WorkData.DropTable(conn);
-        WorkData.CreateTable(conn);
+        WorkData.DropTable();
+        WorkData.CreateTable();
         WorkData wd = new();
-        List<WorkTimeEntry> entries = wd.GetItems(conn);
+        List<WorkTimeEntry> entries = wd.GetItems();
         entries.ForEach(Workentries.Add);
     }
 }

@@ -32,7 +32,6 @@ public class WorkData
         Distance INTEGER
         );";
         command.ExecuteNonQuery();
-        conn?.Close();
     }
     public static void InsertData(string date, string start, string end, long distance)
     {
@@ -48,7 +47,6 @@ public class WorkData
         string time = string.Format("{0:00}:{1:00}",length.Hours,length.Minutes);
         sqlite_cmd.CommandText = $"INSERT INTO WorkTime (Date, Start, End, Time, Distance) VALUES ('{date}','{start}', '{end}', '{time}', {distance})";
         sqlite_cmd.ExecuteNonQuery();
-        conn?.Close();
     }
     public List<WorkTimeEntry> GetItems()
     {
@@ -75,7 +73,6 @@ public class WorkData
         finally
         {
             reader?.Close();
-            conn?.Close();
         }
         return entries;
     }
@@ -84,13 +81,11 @@ public class WorkData
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
         SqliteCommand sqlite_cmd = new($"DELETE FROM WorkTime WHERE id = {id}");
-        conn?.Close();
     }
     public static void DropTable()
     {
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
         SqliteCommand sqlite_cmd = new("DROP WorkTime");
-        conn?.Close();
     }
 }
