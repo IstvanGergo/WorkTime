@@ -17,24 +17,9 @@ public class WorkData
     {
 
     }
-    public static SqliteConnection CreateConnection()
+    public static void CreateTable()
     {
-        SqliteConnection sqlite_conn;
-        // Create a new database connection:
-        sqlite_conn = new SqliteConnection(DatabasePath);
-        try
-        {
-            sqlite_conn.Open();
-        }
-        catch (Exception ex)
-        {
-
-        }
-        return sqlite_conn;
-    }
-    public static void CreateTable (SqliteConnection conn)
-    {
-        
+        using var conn = new SqliteConnection(DatabasePath);
         SqliteCommand command = conn.CreateCommand();
         command.CommandText = @"
         CREATE TABLE IF NOT EXISTS WorkTime (
@@ -46,9 +31,11 @@ public class WorkData
         Distance INTEGER
         );";
         command.ExecuteNonQuery();
+
     }
-    public static void InsertData(SqliteConnection conn, string date, string start, string end, long distance)
+    public static void InsertData(string date, string start, string end, long distance)
     {
+        using var conn = new SqliteConnection(DatabasePath);
         SqliteCommand sqlite_cmd = conn.CreateCommand();
         DateTime dstart = DateTime.ParseExact(start,"HH:mm",CultureInfo.InvariantCulture,
                                               DateTimeStyles.None);
@@ -61,22 +48,24 @@ public class WorkData
         sqlite_cmd.ExecuteNonQuery();
         conn?.Close();
     }
-    public List<WorkTimeEntry> GetItems(SqliteConnection conn)
+    public List<WorkTimeEntry> GetItems()
     {
+        using var conn = new SqliteConnection(DatabasePath);
         SqliteCommand sqlite_cmd = new("SELECT * FROM WorkTime", conn);
         SqliteDataReader reader = null;
         try
         {
-            conn.Open();
             reader =  sqlite_cmd.ExecuteReader();
             while (reader.Read())
             {
-                WorkTimeEntry data = new();
-                data.Date = (string)reader[1];
-                data.Start = (string)reader[2];
-                data.End = (string)reader[3];
-                data.Time = (string)reader[4];
-                data.Distance = (long)reader[5];
+                WorkTimeEntry data = new()
+                {
+                    Date = (string)reader[1],
+                    Start = (string)reader[2],
+                    End = (string)reader[3],
+                    Time = (string)reader[4],
+                    Distance = (long)reader[5]
+                };
                 entries.Add(data);
             }
         }
@@ -87,15 +76,16 @@ public class WorkData
         }
         return entries;
     }
-    public static void DeleteData(SqliteConnection conn, int id)
+    public static void DeleteData( int id)
     {
-        conn.Open();
+        using var conn = new SqliteConnection(DatabasePath);
         SqliteCommand sqlite_cmd = new($"DELETE FROM WorkTime WHERE id = {id}");
         conn?.Close();
     }
-    public static void DropTable(SqliteConnection conn)
+    public static void DropTable()
     {
-        conn.Open();
+        using var conn = new SqliteConnection(DatabasePath);
         SqliteCommand sqlite_cmd = new("DROP WorkTime");
+        conn?.Close();
     }
 }
