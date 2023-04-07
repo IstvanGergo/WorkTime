@@ -1,8 +1,4 @@
-﻿using SQLitePCL;
-using System.Globalization;
-using System.Runtime.Intrinsics.Arm;
-
-namespace WorkTime.Services;
+﻿namespace WorkTime.Services;
 
 public class WorkData
 {
@@ -13,7 +9,7 @@ public class WorkData
         {
             var basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string path =Path.Combine(basePath +"/"+ DatabaseName);
-            return $"{path}";
+            return $"Data Source={path}";
         }
     }
     List<WorkTimeEntry> entries= new();
@@ -81,7 +77,6 @@ public class WorkData
                 data.End = (string)reader[3];
                 data.Time = (string)reader[4];
                 data.Distance = (long)reader[5];
-
                 entries.Add(data);
             }
         }
