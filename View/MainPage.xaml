@@ -5,39 +5,40 @@
              xmlns:viewmodel="clr-namespace:WorkTime.ViewModel"
              x:Class="WorkTime.View.MainPage"
              x:DataType="viewmodel:WorkTimeMainViewModel">
-    <ListView
+    <CollectionView
         ItemsSource="{Binding Workentries}">
-        <ListView.Header>
-            <HorizontalStackLayout
+        <CollectionView.Header
+            Margin="20">
+            <Grid
+                ColumnDefinitions="80,80,80,85,80"
                 HorizontalOptions="Center">
-                <Label Text="Dátum"
-                            MaximumWidthRequest="65"/>
+                <Label Text="Dátum"/>
                 <Label Text="Kezdés időpontja"
-                            HeightRequest="40"
-                            MaximumWidthRequest="80"/>
-                <Label Text="Vége"/>
+                       Grid.Column="1"/>
+                <Label Text="Vége"
+                       Grid.Column="2"/>
                 <Label Text="Munkaidő"
-                            MaximumWidthRequest="85"/>
+                       Grid.Column="3"/>
                 <Label Text="Megtett táv"
-                            MaximumWidthRequest="75"/>
-            </HorizontalStackLayout>
-        </ListView.Header>
-        <ListView.ItemTemplate>
+                       Grid.Column="4"/>
+            </Grid>
+        </CollectionView.Header>
+        <CollectionView.ItemTemplate>
             <DataTemplate x:DataType="model:WorkTimeEntry">
-                <ViewCell>
-                    <HorizontalStackLayout>
-                        <Label Text="{Binding Date}"/>
-                        <Label Text="{Binding Start}"
-                                LineBreakMode="WordWrap"/>
-                        <Label Text="{Binding End}"
-                                LineBreakMode="WordWrap"/>
-                        <Label Text="{Binding Time}"
-                                LineBreakMode="WordWrap"/>
-                        <Label Text="{Binding Distance}"
-                                HorizontalTextAlignment="Center"/>
-                    </HorizontalStackLayout>
-                </ViewCell>
+                <Grid
+                   ColumnDefinitions="80,80,80,85,80"
+                    HorizontalOptions="Center" >
+                    <Label Text="{Binding Date}"/>
+                    <Label Text="{Binding Start}"
+                           Grid.Column="1"/>
+                    <Label Text="{Binding End}"
+                           Grid.Column="2"/>
+                    <Label Text="{Binding Time}"
+                           Grid.Column="3"/>
+                    <Label Text="{Binding Distance}"
+                           Grid.Column="4"/>
+                </Grid>
             </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 </ContentPage>
