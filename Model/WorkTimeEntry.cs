@@ -2,8 +2,6 @@
 
 public class WorkTimeEntry
 {
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
     public string Date { get; set; }
     public string Start { get; set; }
     public string End { get; set; }

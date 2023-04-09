@@ -9,4 +9,4 @@ global using System.Runtime.CompilerServices;
 global using Microsoft.Data.Sqlite;
 global using WorkTime.Services;
 global using System.Globalization;
-global using SQLite;
+global using Microsoft.EntityFrameworkCore;
