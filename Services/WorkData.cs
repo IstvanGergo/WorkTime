@@ -8,11 +8,11 @@ public class WorkData
         get
         {
             var basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string path =Path.Combine(basePath +@"\"+ DatabaseName);
+            string path = Path.Combine(basePath + @"\" + DatabaseName);
             return $"Data Source={path}";
         }
     }
-    List<WorkTimeEntry> entries= new();
+    List<WorkTimeEntry> entries = new();
     public WorkData()
     {
 
@@ -24,8 +24,7 @@ public class WorkData
         conn.Open();
         command.CommandText = @"
         CREATE TABLE IF NOT EXISTS WorkTime (
-        Id INTEGER PRIMARY KEY,
-        Date TEXT,
+        Date TEXT UNIQUE,
         Start TEXT,
         End TEXT,
         Time TEXT,
@@ -33,7 +32,7 @@ public class WorkData
         );";
         command.ExecuteNonQuery();
     }
-    public static void InsertData(string date, string start, string end, long distance)
+    public static void InsertData(string date, string start, string end, long distance) // Check if the Data is already in the database. If it is, ask the user if he wants to update said data
     {
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
@@ -48,11 +47,11 @@ public class WorkData
         sqlite_cmd.CommandText = $"INSERT INTO WorkTime (Date, Start, End, Time, Distance) VALUES ('{date}','{start}', '{end}', '{time}', {distance})";
         sqlite_cmd.ExecuteNonQuery();
     }
-    public List<WorkTimeEntry> GetItems()
+    public List<WorkTimeEntry> GetItems() // The select query will be updated. This method should be able to do all the queries.
     {
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
-        SqliteCommand sqlite_cmd = new("SELECT * FROM WorkTime", conn);
+        SqliteCommand sqlite_cmd = new("SELECT * FROM WorkTime ", conn);
         SqliteDataReader reader = null;
         try
         {
@@ -75,7 +74,7 @@ public class WorkData
             reader?.Close();
         }
         return entries;
-    }
+    } 
     public static void DeleteData(int id)
     {
         using var conn = new SqliteConnection(DatabasePath);
