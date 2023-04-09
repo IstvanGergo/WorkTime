@@ -6,4 +6,14 @@ public partial class AddItemsPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+    private void DatePicker_HandlerChanged(object sender, EventArgs e)
+    {
+
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+
+    }
 }

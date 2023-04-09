@@ -2,11 +2,45 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WorkTime.View.AddItemsPage"
-             Title="AddItemsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+             xmlns:model="clr-namespace:WorkTime.Model"
+             xmlns:viewmodel="clr-namespace:WorkTime.ViewModel"
+             x:DataType="viewmodel:AddItemsPageViewModel">
+    <Grid ColumnDefinitions="*,*"
+          RowDefinitions="*,*"
+          Margin="20"
+          Padding="20"
+        VerticalOptions="Center">
+        <VerticalStackLayout>
+            <Label Text="Dátum"
+                   FontSize="Medium"/>
+            <Label Text="Kezdés ideje"
+                   FontSize="Medium"/>
+            <Label Text="Vége"
+                   FontSize="Medium"/>
+            <Label Text="Megtett táv"
+                   FontSize="Medium"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout
+            Grid.Column="1">
+            <DatePicker
+                HorizontalOptions="Center"
+                HandlerChanged="DatePicker_HandlerChanged"/>
+            <TimePicker
+                HorizontalOptions="Center"/>
+            <TimePicker
+                HorizontalOptions="Center"/>
+            <Entry
+                HorizontalOptions="Center"
+                Keyboard="Numeric"
+                ReturnType="Done"/>
+        </VerticalStackLayout>
+        <VerticalStackLayout
+            Grid.Row="2"
+            Grid.ColumnSpan="2">
+            <Button Text="Adat felvétele"
+                    FontSize="Medium"
+                    Clicked="Button_Clicked"
+                    VerticalOptions="Center"/>
+        </VerticalStackLayout>
+    </Grid>
 </ContentPage>
