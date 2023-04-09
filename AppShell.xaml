@@ -4,11 +4,25 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:WorkTime.View"
-    Shell.FlyoutBehavior="Flyout">
+    Shell.FlyoutBehavior="Flyout"
+    FlyoutWidth="250">
 
-    <ShellContent
-        Title="Munkaidő Táblázat"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <FlyoutItem Title="Munkaidő Táblázat">
+        <Tab>
+            <ShellContent
+            Title="Munkaidő Táblázat"
+            ContentTemplate="{DataTemplate local:MainPage}"
+            Route="MainPage" />
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Dátum hozzáadása">
+        <Tab>
+            <ShellContent
+            Title="Dátum hozzáadása"
+            ContentTemplate="{DataTemplate local:AddItemsPage}"
+            Route="AddItemsPage" />
+        </Tab>
+    </FlyoutItem>
+                
 
 </Shell>
