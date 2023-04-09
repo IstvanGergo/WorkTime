@@ -10,7 +10,6 @@
                 <Setter Property="Margin" Value="10"/>
                 <Setter Property="HorizontalTextAlignment" Value="Center"/>
                 <Setter Property="LineBreakMode" Value="WordWrap"/>
-                
             </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
