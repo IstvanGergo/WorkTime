@@ -2,13 +2,13 @@
 
 public class WorkData
 {
-    public const string DatabaseName = "WorkTime.db3";
+    public static string DatabaseName = "WorkTimeDB.db";
     public static string DatabasePath
     {
         get
         {
             var basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string path =Path.Combine(basePath +"/"+ DatabaseName);
+            string path =Path.Combine(basePath +@"\"+ DatabaseName);
             return $"Data Source={path}";
         }
     }
@@ -38,13 +38,13 @@ public class WorkData
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
         SqliteCommand sqlite_cmd = conn.CreateCommand();
-        DateTime dstart = DateTime.ParseExact(start,"HH:mm",CultureInfo.InvariantCulture,
+        DateTime dstart = DateTime.ParseExact(start, "HH:mm", CultureInfo.InvariantCulture,
                                               DateTimeStyles.None);
-        DateTime dend= DateTime.ParseExact(end, "HH:mm", CultureInfo.InvariantCulture,
+        DateTime dend = DateTime.ParseExact(end, "HH:mm", CultureInfo.InvariantCulture,
                                               DateTimeStyles.None);
         TimeSpan length = dend - dstart;
 
-        string time = string.Format("{0:00}:{1:00}",length.Hours,length.Minutes);
+        string time = string.Format("{0:00}:{1:00}", length.Hours, length.Minutes);
         sqlite_cmd.CommandText = $"INSERT INTO WorkTime (Date, Start, End, Time, Distance) VALUES ('{date}','{start}', '{end}', '{time}', {distance})";
         sqlite_cmd.ExecuteNonQuery();
     }
@@ -56,7 +56,7 @@ public class WorkData
         SqliteDataReader reader = null;
         try
         {
-            reader =  sqlite_cmd.ExecuteReader();
+            reader = sqlite_cmd.ExecuteReader();
             while (reader.Read())
             {
                 WorkTimeEntry data = new()
@@ -76,7 +76,7 @@ public class WorkData
         }
         return entries;
     }
-    public static void DeleteData( int id)
+    public static void DeleteData(int id)
     {
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
