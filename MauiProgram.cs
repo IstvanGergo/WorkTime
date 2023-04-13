@@ -23,6 +23,7 @@ public static class MauiProgram
 		builder.Services.AddSingleton<MainPage>();
 		builder.Services.AddSingleton<WorkTimeMainViewModel>();
 		builder.Services.AddSingleton<AddItemsPage>();
+        builder.Services.AddSingleton<AddItemsPageViewModel>();
 
         return builder.Build();
 	}
