@@ -1,4 +1,6 @@
-﻿namespace WorkTime.Services;
+﻿using CommunityToolkit.Mvvm.Input;
+
+namespace WorkTime.Services;
 
 public class WorkData
 {
@@ -12,6 +14,14 @@ public class WorkData
             return $"Data Source={path}";
         }
     }
+    async Task<string> LoadMauiAsset()
+    {
+        using var stream = await FileSystem.OpenAppPackageFileAsync("WorkTimeDB.db");
+        using var reader = new StreamReader(stream);
+        var contents = reader.ReadToEnd();
+        return contents;
+    }
+
     List<WorkTimeEntry> entries = new();
     public WorkData()
     {
@@ -32,30 +42,47 @@ public class WorkData
         );";
         command.ExecuteNonQuery();
     }
-    public static void InsertData(string date, string start, string end, long distance) // Check if the Data is already in the database. If it is, ask the user if he wants to update said data
+    public static void InsertData(DateTime date, TimeSpan start, TimeSpan end, long distance) // Check if the Data is already in the database. If it is, ask the user if he wants to update said data
     {
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
         SqliteCommand sqlite_cmd = conn.CreateCommand();
-        DateTime dstart = DateTime.ParseExact(start, "HH:mm", CultureInfo.InvariantCulture,
-                                              DateTimeStyles.None);
-        DateTime dend = DateTime.ParseExact(end, "HH:mm", CultureInfo.InvariantCulture,
-                                              DateTimeStyles.None);
-        TimeSpan length = dend - dstart;
-
+        DateTime d = new(date.Year, date.Month, date.Day);
+        sqlite_cmd.CommandText = $"SELECT * FROM WorkTime WHERE Date = {d}";
+        TimeSpan length = end - start;
         string time = string.Format("{0:00}:{1:00}", length.Hours, length.Minutes);
-        sqlite_cmd.CommandText = $"INSERT INTO WorkTime (Date, Start, End, Time, Distance) VALUES ('{date}','{start}', '{end}', '{time}', {distance})";
-        sqlite_cmd.ExecuteNonQuery();
+        string Start = string.Format("{0:00}:{1:00}", start.Hours, start.Minutes);
+        string End = string.Format("{0:00}:{1:00}", end.Hours, end.Minutes);
+        if (length < TimeSpan.Zero)
+        {
+            Shell.Current.DisplayAlert("HIBA!", "A két idő különbsége nem lehet kisebb mint 0!", "OK");
+        }
+        if (sqlite_cmd.ExecuteScalar() == null)
+        {
+            sqlite_cmd.CommandText = $"INSERT INTO WorkTime (Date, Start, End, Time, Distance) VALUES ('{d}','{Start}', '{End}', '{time}', {distance})";
+            sqlite_cmd.ExecuteNonQuery();
+        }
+        else
+        {
+            sqlite_cmd.CommandText = $"UPDATE WorkTime Set Start = {start}, End = {end}, Time = {time}, Distance = {distance} WHERE Date = {date}";
+            sqlite_cmd.ExecuteNonQuery();
+        }
+
+
+
+
     }
-    public List<WorkTimeEntry> GetItems() // The select query will be updated. This method should be able to do all the queries.
+    public List<WorkTimeEntry> GetItems(DateTime start, DateTime end) // The select query will be updated. This method should be able to do all the queries.
     {
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
-        SqliteCommand sqlite_cmd = new("SELECT * FROM WorkTime ", conn);
+        string s = start.ToString("s").Remove(10);
+        string e = end.ToString("s").Remove(10);
+        SqliteCommand sqlite_cmd = new($"SELECT * FROM WorkTime WHERE Date BETWEEN {s} AND {e}",conn);
         SqliteDataReader reader = null;
         try
         {
-            reader = sqlite_cmd.ExecuteReader();
+            reader =  sqlite_cmd.ExecuteReader();
             while (reader.Read())
             {
                 WorkTimeEntry data = new()
