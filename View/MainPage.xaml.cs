@@ -4,7 +4,7 @@ public partial class MainPage : ContentPage
 {
 	public MainPage(WorkTimeMainViewModel viewModel)
 	{
-		InitializeComponent();
+        InitializeComponent();
 		BindingContext = viewModel;
 	}
 }

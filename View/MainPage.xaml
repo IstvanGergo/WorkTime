@@ -1,44 +1,87 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WorkTime.View.MainPage"
              xmlns:model="clr-namespace:WorkTime.Model"
              xmlns:viewmodel="clr-namespace:WorkTime.ViewModel"
-             x:Class="WorkTime.View.MainPage"
              x:DataType="viewmodel:WorkTimeMainViewModel">
-    <CollectionView
-        ItemsSource="{Binding Workentries}">
-        <CollectionView.Header
-            Margin="20">
-            <Grid
-                ColumnDefinitions="80,80,80,85,80"
-                HorizontalOptions="Center">
-                <Label Text="Dátum"/>
-                <Label Text="Kezdés időpontja"
-                       Grid.Column="1"/>
-                <Label Text="Vége"
-                       Grid.Column="2"/>
-                <Label Text="Munkaidő"
-                       Grid.Column="3"/>
-                <Label Text="Megtett táv"
-                       Grid.Column="4"/>
-            </Grid>
-        </CollectionView.Header>
-        <CollectionView.ItemTemplate>
-            <DataTemplate x:DataType="model:WorkTimeEntry">
+    <Grid
+        RowDefinitions="*,Auto"
+        ColumnDefinitions="*,*,*,*,*"
+        >
+        <CollectionView
+            Grid.ColumnSpan="5"
+            ItemsSource="{Binding Workentries}">
+            <CollectionView.Header
+                
+                Margin="20">
                 <Grid
-                   ColumnDefinitions="80,80,80,85,80"
-                    HorizontalOptions="Center" >
-                    <Label Text="{Binding Date}"/>
-                    <Label Text="{Binding Start}"
-                           Grid.Column="1"/>
-                    <Label Text="{Binding End}"
-                           Grid.Column="2"/>
-                    <Label Text="{Binding Time}"
-                           Grid.Column="3"/>
-                    <Label Text="{Binding Distance}"
-                           Grid.Column="4"/>
+                    ColumnDefinitions="80,80,80,85,80"
+                    HorizontalOptions="Center">
+                    <Label Text="Dátum"/>
+                    <Label Text="Kezdés időpontja"
+                               Grid.Column="1"/>
+                    <Label Text="Vége"
+                               Grid.Column="2"/>
+                    <Label Text="Munkaidő"
+                               Grid.Column="3"/>
+                    <Label Text="Megtett táv"
+                               Grid.Column="4"/>
                 </Grid>
-            </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate
+                Grid.ColumnSpan="5">
+                <DataTemplate x:DataType="model:WorkTimeEntry">
+                    <Grid
+                        ColumnDefinitions="80,80,80,85,80"
+                        HorizontalOptions="Center" >
+                        <Label Text="{Binding Date}"/>
+                        <Label Text="{Binding Start}"
+                                Grid.Column="1"/>
+                        <Label Text="{Binding End}"
+                                Grid.Column="2"/>
+                        <Label Text="{Binding Time}"
+                                Grid.Column="3"/>
+                        <Label Text="{Binding Distance}"
+                                Grid.Column="4"/>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button
+            x:Name="Filter"
+            Grid.Row="1"
+            Grid.Column="4"
+            HorizontalOptions="End"
+            WidthRequest="100"
+            Text="Szűrés"
+            Margin="20"
+            Padding="20"
+            Command="{Binding GetEntriesCommand}"/>
+        <DatePicker
+            Grid.Row="1"
+            VerticalOptions="Center"
+            HorizontalOptions="Start"
+            x:Name="StartDate"
+            Date="{Binding Startdate, Mode=TwoWay}"/>
+        <Label
+            Grid.Row="1"
+            Grid.Column="1"
+            VerticalOptions="Center"
+            HorizontalOptions="Start"
+            Text="-tól"/>
+        <DatePicker
+            Grid.Row="1"
+            Grid.Column="2"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            x:Name="EndDate"
+            Date="{Binding Enddate, Mode=TwoWay}"/>
+        <Label
+            Grid.Row="1"
+            Grid.Column="3"
+            VerticalOptions="Center"
+            HorizontalOptions="Start"
+            Text="-ig"/>
+    </Grid>
 </ContentPage>

@@ -24,23 +24,34 @@
             Grid.Column="1">
             <DatePicker
                 HorizontalOptions="Center"
-                HandlerChanged="DatePicker_HandlerChanged"/>
+                x:Name="Date"
+                Date="{Binding VDate, Mode=TwoWay}"/>
             <TimePicker
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center"
+                x:Name="Start"
+                Time="{Binding VStart}"
+                Format="HH:mm"/>
             <TimePicker
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center"
+                x:Name="End"
+                Time="{Binding VEnd}"
+                Format="HH:mm"/>
             <Entry
                 HorizontalOptions="Center"
                 Keyboard="Numeric"
-                ReturnType="Done"/>
+                ReturnType="Done"
+                x:Name="Distance"
+                BindingContext="{Binding VDistance}"/>
         </VerticalStackLayout>
         <VerticalStackLayout
             Grid.Row="2"
-            Grid.ColumnSpan="2">
-            <Button Text="Adat felvétele"
+            Grid.ColumnSpan="2"
+            x:DataType="viewmodel:AddItemsPageViewModel">
+            <Button x:Name="DataInput"
+                    Text="Adat felvétele"
                     FontSize="Medium"
-                    Clicked="Button_Clicked"
-                    VerticalOptions="Center"/>
+                    VerticalOptions="Center"
+                    Command="{Binding AddItemCommand}"/>
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
