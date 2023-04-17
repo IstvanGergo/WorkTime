@@ -5,10 +5,11 @@ namespace WorkTime;
 
 public static class MauiProgram
 {
-	public static MauiApp CreateMauiApp()
+    
+    public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();
-		builder
+        builder
 			.UseMauiApp<App>()
 			.ConfigureFonts(fonts =>
 			{
@@ -27,4 +28,5 @@ public static class MauiProgram
 
         return builder.Build();
 	}
+
 }
