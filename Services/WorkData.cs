@@ -9,12 +9,13 @@ public class WorkData
     {
         get
         {
+
             var basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string path = Path.Combine(basePath + @"\" + DatabaseName);
+            string path = Path.Combine(basePath + @"/" + DatabaseName);
             return $"Data Source={path}";
         }
     }
-    async Task<string> LoadMauiAsset()
+    static async Task<string> LoadMauiAsset()
     {
         using var stream = await FileSystem.OpenAppPackageFileAsync("WorkTimeDB.db");
         using var reader = new StreamReader(stream);
@@ -25,6 +26,7 @@ public class WorkData
     List<WorkTimeEntry> entries = new();
     public WorkData()
     {
+        LoadMauiAsset();
 
     }
     public static void CreateTable()
@@ -47,8 +49,7 @@ public class WorkData
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
         SqliteCommand sqlite_cmd = conn.CreateCommand();
-        DateTime d = new(date.Year, date.Month, date.Day);
-        sqlite_cmd.CommandText = $"SELECT * FROM WorkTime WHERE Date = {d}";
+        sqlite_cmd.CommandText = $"SELECT * FROM WorkTime WHERE Date = {date.Year}-{date.Month}-{date.Day}";
         TimeSpan length = end - start;
         string time = string.Format("{0:00}:{1:00}", length.Hours, length.Minutes);
         string Start = string.Format("{0:00}:{1:00}", start.Hours, start.Minutes);
@@ -59,12 +60,12 @@ public class WorkData
         }
         if (sqlite_cmd.ExecuteScalar() == null)
         {
-            sqlite_cmd.CommandText = $"INSERT INTO WorkTime (Date, Start, End, Time, Distance) VALUES ('{d}','{Start}', '{End}', '{time}', {distance})";
+            sqlite_cmd.CommandText = $"INSERT INTO WorkTime (Date, Start, End, Time, Distance) VALUES ('{date.Year}-{date.Month}-{date.Day}','{Start}', '{End}', '{time}', {distance})";
             sqlite_cmd.ExecuteNonQuery();
         }
         else
         {
-            sqlite_cmd.CommandText = $"UPDATE WorkTime Set Start = {start}, End = {end}, Time = {time}, Distance = {distance} WHERE Date = {date}";
+            sqlite_cmd.CommandText = $"UPDATE WorkTime Set Start = {start}, End = {end}, Time = {time}, Distance = {distance} WHERE Date = {date.Year}-{date.Month}-{date.Day}";
             sqlite_cmd.ExecuteNonQuery();
         }
 
@@ -106,7 +107,7 @@ public class WorkData
     {
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
-        SqliteCommand sqlite_cmd = new($"DELETE FROM WorkTime WHERE id = {id}");
+        SqliteCommand sqlite_cmd = new($"DELETE FROM WorkTime WHERE ROWID = {id}");
     }
     public static void DropTable()
     {
