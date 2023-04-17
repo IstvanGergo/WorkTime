@@ -7,5 +7,11 @@ public partial class MainPage : ContentPage
         InitializeComponent();
 		BindingContext = viewModel;
 	}
+
+    private void CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        Delete.IsVisible = true;
+        Modify.IsVisible = true;
+    }
 }
 
