@@ -34,6 +34,7 @@ public partial class WorkTimeMainViewModel : BaseViewModel
     [ICommand]
     public Task GetEntries()
     {
+        Workentries.Clear();
         WorkData wd = new();
         List<WorkTimeEntry> entries = wd.GetItems(startdate, enddate);
         foreach (WorkTimeEntry entry in entries)
