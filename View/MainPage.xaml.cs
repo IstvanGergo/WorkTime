@@ -14,4 +14,3 @@ public partial class MainPage : ContentPage
         Modify.IsVisible = true;
     }
 }
-
