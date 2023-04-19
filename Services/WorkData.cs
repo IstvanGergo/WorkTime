@@ -11,7 +11,7 @@ public class WorkData
         {
 
             var basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string path = Path.Combine(basePath + @"/" + DatabaseName);
+            string path = Path.Combine(basePath + @"\" + DatabaseName);
             return $"Data Source={path}";
         }
     }
@@ -49,9 +49,10 @@ public class WorkData
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
         SqliteCommand sqlite_cmd = conn.CreateCommand();
-        sqlite_cmd.CommandText = $"SELECT * FROM WorkTime WHERE Date = {date.Year}-{date.Month}-{date.Day}";
+        string date_to_insert = date.ToString("s").Remove(10); //
+        sqlite_cmd.CommandText = $"SELECT * FROM WorkTime WHERE Date = {date_to_insert}";
         TimeSpan length = end - start;
-        string time = string.Format("{0:00}:{1:00}", length.Hours, length.Minutes);
+        string time = string.Format("{0:00}:{1:00}", length.Hours, length.Minutes); //
         string Start = string.Format("{0:00}:{1:00}", start.Hours, start.Minutes);
         string End = string.Format("{0:00}:{1:00}", end.Hours, end.Minutes);
         if (length < TimeSpan.Zero)
@@ -60,26 +61,22 @@ public class WorkData
         }
         if (sqlite_cmd.ExecuteScalar() == null)
         {
-            sqlite_cmd.CommandText = $"INSERT INTO WorkTime (Date, Start, End, Time, Distance) VALUES ('{date.Year}-{date.Month}-{date.Day}','{Start}', '{End}', '{time}', {distance})";
+            sqlite_cmd.CommandText = $"INSERT INTO WorkTime (Date, Start, End, Time, Distance) VALUES ('{date_to_insert}','{Start}', '{End}', '{time}', {distance})";
             sqlite_cmd.ExecuteNonQuery();
         }
         else
         {
-            sqlite_cmd.CommandText = $"UPDATE WorkTime Set Start = {start}, End = {end}, Time = {time}, Distance = {distance} WHERE Date = {date.Year}-{date.Month}-{date.Day}";
+            sqlite_cmd.CommandText = $"UPDATE WorkTime Set Start = {start}, End = {end}, Time = {time}, Distance = {distance} WHERE Date = {date_to_insert}";
             sqlite_cmd.ExecuteNonQuery();
         }
-
-
-
-
     }
-    public List<WorkTimeEntry> GetItems(DateTime start, DateTime end) // The select query will be updated. This method should be able to do all the queries.
+    public List<WorkTimeEntry> GetItems(DateTime start, DateTime end) // List all records between the two dates
     {
         using var conn = new SqliteConnection(DatabasePath);
         conn.Open();
         string s = start.ToString("s").Remove(10);
         string e = end.ToString("s").Remove(10);
-        SqliteCommand sqlite_cmd = new($"SELECT * FROM WorkTime WHERE Date BETWEEN {s} AND {e}",conn);
+        SqliteCommand sqlite_cmd = new($"SELECT * FROM WorkTime",conn);
         SqliteDataReader reader = null;
         try
         {
