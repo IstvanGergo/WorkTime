@@ -5,7 +5,7 @@ public partial class AddItemsPageViewModel : BaseViewModel
     public ObservableObject WorkTimeEntry { get; set; }
     public AddItemsPageViewModel()
     {
-        Vdate= DateTime.Now;
+        Vdate = DateTime.Now;
     }
 
     private DateTime Vdate;
@@ -55,7 +55,7 @@ public partial class AddItemsPageViewModel : BaseViewModel
     [ICommand]
     Task AddItem()
     {
-        WorkData.InsertData(Vdate,Vstart,Vend,Vdistance);
+        WorkData.InsertData(Vdate,Vstart,Vend,Vdistance); //the distance doesnt get inserted
         return Task.CompletedTask;
     }
 }
