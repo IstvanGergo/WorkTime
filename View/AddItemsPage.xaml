@@ -41,7 +41,7 @@
                 Keyboard="Numeric"
                 ReturnType="Done"
                 x:Name="Distance"
-                BindingContext="{Binding VDistance}"/>
+                Text="{Binding VDistance}"/>
         </VerticalStackLayout>
         <VerticalStackLayout
             Grid.Row="2"
