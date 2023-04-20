@@ -1,6 +1,4 @@
-﻿using System;
-using WorkTime.ViewModel;
-namespace WorkTime.ViewModel;
+﻿namespace WorkTime.ViewModel;
 
 public partial class BaseViewModel : ObservableObject
 {
