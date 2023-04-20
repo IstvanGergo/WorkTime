@@ -42,7 +42,6 @@ public partial class WorkTimeMainViewModel : BaseViewModel
             Workentries.Add(entry);
         }
         return Task.FromResult(entries);
-        
     }
     
 }
