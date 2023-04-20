@@ -55,7 +55,8 @@ public partial class AddItemsPageViewModel : BaseViewModel
     [ICommand]
     Task AddItem()
     {
-        WorkData.InsertData(Vdate,Vstart,Vend,Vdistance); //the distance doesnt get inserted
+        
+        WorkData.InsertData(Vdate,Vstart,Vend,Vdistance);
         return Task.CompletedTask;
     }
 }
