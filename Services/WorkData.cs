@@ -20,8 +20,7 @@ public class WorkData
     List<WorkTimeEntry> entries = new();
     public WorkData()
     {
-        LoadDatabase();
-
+        
     }
     public static void CreateTable()
     {
@@ -56,12 +55,12 @@ public class WorkData
         if (sqlite_cmd.ExecuteScalar() == null)
         {
 
-            sqlite_cmd.CommandText = $"INSERT INTO WorkTime VALUES ('{date_to_insert}','{Start}', '{End}', '{time}', {(int)distance})";
+            sqlite_cmd.CommandText = $"INSERT INTO WorkTime VALUES ('{date_to_insert}','{Start}', '{End}', '{time}', {distance})";
             sqlite_cmd.ExecuteNonQuery();
         }
         else
         {
-            sqlite_cmd.CommandText = $"UPDATE WorkTime Set Start = {Start}, End = {End}, Time = {time}, Distance = {(int)distance} WHERE Date = {date_to_insert}";
+            sqlite_cmd.CommandText = $"UPDATE WorkTime Set Start = {Start}, End = {End}, Time = {time}, Distance = {distance} WHERE Date = {date_to_insert}";
             sqlite_cmd.ExecuteNonQuery();
         }
     }
